@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of grainsize</title>
+  <meta name="keywords" content="grainsize">
+  <meta name="description" content="determine surface properties from STM and AFM images">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">src</a> &gt; grainsize.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for src&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>grainsize
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>determine surface properties from STM and AFM images</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> determine surface properties from STM and AFM images
+
+                          _____--_____                                              
+               _____------             ------____                                                         
+              |                                  |                           
+              |                                  |                               
+              |__________________________________|                                                                                       
+                    /       /        |       |                                     
+                   /       /         |       |                                                
+                  /       /          |       |                                              
+                 /       /           |_______|                                            
+                /       /             _______                                                       
+               /       /             |       |                                     
+              /       /              |       |                                                
+             /       /               |       |                                              
+            /       /                |_______|                                                 
+           /       /                  _______                                                     
+          /       /                  |       |                                     
+         /       /                   |       |                                               
+        /       /                    |       |                                              
+       /_______/                     |_______|                                                                
+                                                             
+       TU Kaiserslautern
+       Fachbereich Physik
+       AG Magnetismus
+                                                               
+       Authors: * Philipp Jaeger
+
+================================================================
+
+ This script analyses AFM/STM images and calculates the roughness
+ in the lateral directions. Images have to be cropped such that
+ no artifacts are visible in order to obtain reasonable data.
+ Currently, only grayscale images are supported.
+
+ This script is based on Philipp Fuhrmann's script written in R,
+ and on the PhD thesis of Tim Mewes, Appendix A
+
+ In order to run this script, some configuration data has to be hard-coded
+ in the upper code section. 
+
+ DO NOT CHANGE CODE OUTSIDE THIS SECTION, EXCEPT YOU KNOW WHAT YOU ARE 
+ DOING. BE SURE TO HAVE YOUR MEASURMENT DATA BACKUPED. UNECPEXTED
+ BEHAVIOUR MIGHT CAUSE LOSS OF DATA.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="calcCF.html" class="code" title="function [ cf_x, cf_y, avg, span, rms ] = calcCF( mat )">calcCF</a>	calcCF - calculate correlation function in x and y direction of</li><li><a href="calcParam.html" class="code" title="function [ roughness, thickness, corrlen ] = calcParam( cf, label, startParam )">calcParam</a>	Calculate characteristic parameters</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Wed 28-Jan-2015 07:21:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
