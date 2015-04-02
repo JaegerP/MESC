@@ -11,7 +11,7 @@ function [ roughness, thickness, corrlen ] = calcParam( cf, label, startParam )
 
 % declare globals
 global m_Distance;
-global m_HightTick;
+%global m_HightTick;
 
 %% Fit curves
 distScale = ( 1:max( size( cf ) ) ) * m_Distance;

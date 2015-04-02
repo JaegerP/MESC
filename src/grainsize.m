@@ -49,9 +49,11 @@
 % declare globals
 global m_Distance;
 global m_HightTick;
+%global m_LayerInitial;
 
 % input file location
 m_InputPath = 'testimg.j2c';
+%m_InputPath='../no7.bmp';
 
 % total input image size ( before cropping !!! )
 % in px
@@ -61,20 +63,39 @@ m_TotalImageSize_px = 800;
 % in nm
 m_TotalImageSize_nm = 200;
 
+%xy Calibration factor 
+xyCalibration = 5.1; %STM before Jan '13
+
 % maximum height difference (maximum - minimum) in nm
 m_TotalHeight = 10;
+
+% estimated Layer thickness
+%m_LayerInitial = 10*m_HightTick;
 
 %% CALCULATION
 
 %colse open figures if any
 close all;
 
-m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px;
+%m_HightTick = m_TotalHeight / mean (span);
+m_HightTick = 0.61634556  / 256;
+
+m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px * xyCalibration;
 m_InputImage = imread( m_InputPath );
+if size(m_InputImage,3) == 3
+    m_InputImage = rgb2gray( m_InputImage );
+end
+inputData = double( m_InputImage ) * m_HightTick;
 
-[ cf_x, cf_y, avg, span, rms ] = calcCF( m_InputImage );
+[ cf_x, cf_y, avg, span, rms ] = calcCF( inputData );
 
-m_HightTick = m_TotalHeight / double( span );
+%calcParam( cf_x, 'x', [0 0 0] );
+calcParam( cf_x, 'x', [5 2 1] );
 
-calcParam( cf_x, 'x', [10 1 3] );
-calcParam( cf_y, 'y', [10 1 3] );
+
+labeledImage = bwlabel(binaryImage);
+measurements = regionprops(labeledImage, 'EquivDiameter');
+allDiameters = [measurements.EquivDiameter];
+numberOfBins = 50; % Or whatever you want.
+[diamDistribution binDiameters] = hist(allDiameters, numberOfBins);
+bar(binDiameters, diamDistribution, 'BarWidth', 1.0);
