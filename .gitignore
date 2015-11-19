@@ -1,6 +1,8 @@
 #image types
 *.png
 *.jpg
+*.tif
+*.tiff 
 
 #matlab stuff
 *.mat
