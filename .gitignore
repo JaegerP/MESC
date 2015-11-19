@@ -1,0 +1,7 @@
+#image types
+*.png
+*.jpg
+
+#matlab stuff
+*.mat
+*.fig
