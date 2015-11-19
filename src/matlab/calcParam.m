@@ -1,4 +1,4 @@
-function [ roughness, thickness, corrlen ] = calcParam( cf, label, startParam )
+function [ fig ] = calcParam( cf, label, startParam )
 %Calculate characteristic parameters
 %
 % Arguments:
@@ -17,7 +17,6 @@ global m_Distance;
 distScale = ( 1:max( size( cf ) ) ) * m_Distance;
 
 %m_HightTick = ( 1 );
-
 [ fig, fitresult, gof ] = createFit( distScale, cf, label, startParam );
 
 roughness=fitresult.r;
@@ -25,5 +24,7 @@ thickness=sqrt((fitresult.d)/2);%*m_HightTick;
 corrlen=fitresult.a;
 %text(0,0,sprintf('Fit parameters %s-Direction:\nroughness: %.3f\nlayer thickness: %.3f\ncorrelation length: %.3f', label, roughness, thickness, corrlen));
 disp(sprintf('Fit parameters %s-Direction:\nroughness: %.3f\nlayer thickness: %.3f\ncorrelation length: %.3f', label, roughness, thickness, corrlen));
+savefig(sprintf('CorrelationFunction_%s.fig',label));
+close all;
 end
 

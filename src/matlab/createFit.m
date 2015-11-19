@@ -23,27 +23,21 @@ ft = fittype( 'd*(1-exp(-(x/a)^r))', 'independent', 'x', 'dependent', 'y' );
 opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
 opts.Display = 'Off';
 % [d a r]
-opts.Lower = [0 0 0];
-opts.Upper = [Inf Inf Inf];
-opts.StartPoint = startParam;
+%opts.Lower = [0 0 0];
+%opts.Upper = [Inf Inf Inf];
+opts.StartPoint = startParam;% [3 10 1];
 
 % Fit model to data.
 [fitresult, gof] = fit( xData, yData, ft, opts );
 
 
 % Plot fit with data.
+%label='test';
 fig=figure( 'Name',sprintf('%s-Height Correlation Function', label) );
 
-% Create axes
-axes1 = axes('Parent',fig,'YMinorTick','on','YScale','log',...
-    'XMinorTick','on',...
-    'XScale','log');
-%ylim(axes1,[1 20]);
-%xlim(axes1,[0.1 100]);
-box(axes1,'on');
-%hold(axes1,'on');
+% Create plot
 title({sprintf('%s-Height Correlation Function', label)});
-loglog( 0.1:0.001:max(xData), fitresult(0.1:0.001:max(xval)), 'r', xData, yData, 'b.' );
+loglog( min(xData):0.001:max(xData), fitresult(min(xData):0.001:max(xData)), 'r', xData, yData, 'b.' );
 %legend( sprintf('fit function\nroughness=%.2f', fitresult.r), 'measurement', 'Location', 'SouthEast' );
 legend( 'fit function', 'measurement', 'Location', 'SouthEast' );
 % Create ylabel
