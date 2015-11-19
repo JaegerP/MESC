@@ -5,3 +5,4 @@
 #matlab stuff
 *.mat
 *.fig
+*.m~
