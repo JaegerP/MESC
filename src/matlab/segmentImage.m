@@ -9,13 +9,14 @@ function [BW,maskedImage] = segmentImage(im)
 
 % Initialize segmentation with Otsu's threshold
 level = graythresh(im);
-mask = im2bw(im,level);
+% We use a slightly higher thershhold here
+mask = im2bw(im,level*1.14);
 
 % Suppress components connected to image border
 BW = imclearborder(mask);
 
 % Filter components by area
-BW = bwareafilt(BW, [200 3000]);
+BW = bwareafilt(BW, [20 3000]);
 
 % Evolve segmentation
 BW = activecontour(im, BW, 40, 'Chan-Vese');
