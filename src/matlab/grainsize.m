@@ -73,10 +73,7 @@ m_TotalImageSize_nm = 100; %Probably, that's it
 
 % xy Calibration factor (some magic factor taken from Philipp Fuhrmann's
 % original script)
-%m_XYCalibration = 5.1; %STM before Jan '13
-
-% maximum height difference (maximum - minimum) in nm
-m_TotalHeight = 10;
+m_XYCalibration = 5.1; %STM before Jan '13
 
 % boundadies for grain area (in pixels)
 % you may need to adjust this.
@@ -88,9 +85,8 @@ m_ExcentricityBoundary = [0 1];
 % Number of bins for grainsize histogram
 m_NumberOfBins = 20; % Or whatever you want.
 
-%m_HightTick = m_TotalHeight / mean (span);
-% some magic factor, too
-%m_HightTick = 0.61634556  / 256;
+%m_HightTick = total height of color scale / number of colors;
+m_HightTick = 1.1191  / 256;
 
 % estimated Layer thickness
 %m_LayerInitial = 10*m_HightTick;
@@ -100,21 +96,19 @@ m_NumberOfBins = 20; % Or whatever you want.
 %close open figures if any
 close all;
 
-%m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px * m_XYCalibration;
-m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px;
+m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px * m_XYCalibration;
+%m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px;
 m_InputImage = imread( m_InputPath );
 if size(m_InputImage,3) == 3
     m_InputImage = rgb2gray( m_InputImage );
 end
-%inputData = double( m_InputImage ) * m_HightTick;
-inputData = double( m_InputImage );
+inputData = double( m_InputImage ) * m_HightTick;
 
-%[ cf_x, cf_y, avg, span, rms ] = calcCF( inputData );
+[ cf_x, cf_y, avg, span, rms ] = calcCF( inputData );
 
 % start parameters: [a d r], function d*(1-exp(-(x/a)^r))
-%calcParam( cf_x, 'x', [0 0 0] );
-%calcParam( cf_x, 'x', [3 10 1] );
-%calcParam( cf_y, 'y', [3 10 1] );
+calcParam( cf_x, 'x', [10 2 0] );
+calcParam( cf_y, 'y', [10 2 0] );
 %return;
 
 %% IMAGE ANALYSIS

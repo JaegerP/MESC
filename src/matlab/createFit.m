@@ -22,8 +22,8 @@ global m_HightTick;
 ft = fittype( 'd*(1-exp(-(x/a)^r))', 'independent', 'x', 'dependent', 'y' );
 opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
 opts.Display = 'Off';
-% [d a r]
-%opts.Lower = [0 0 0];
+% [a d r]
+opts.Lower = [0 0 1];
 %opts.Upper = [Inf Inf Inf];
 opts.StartPoint = startParam;% [3 10 1];
 
