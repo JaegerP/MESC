@@ -16,3 +16,5 @@
 *.mat
 *.fig
 *.m~
+#do not push symlinks
+roughness-2016-01-08/*.m
