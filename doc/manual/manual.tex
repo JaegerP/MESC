@@ -1,0 +1,93 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage[left=2.5cm,right=2.5cm,top=4cm,bottom=2.5cm]{geometry}
+
+\newcommand{\grainsize}{\texttt{grainsize.m}\xspace}
+
+\title{\grainsize manual}
+
+\renewcommand{\familydefault}{\sfdefault}
+\setlength{\parindent}{0cm}
+\begin{document}
+\maketitle
+
+
+\section{Implementation}
+\subsection{STM/AFM microscopy}
+Steht im Labor.
+\subsection{Surface characterization}
+In an MBE setup, a layer grows starting with atoms from the vapour condensing on the substrate. Once a certain density is reached, atoms will not settle themselves alone but will start to build chrystals. As the chrystals grow, they bump together and from grains, which are surrounded by lattice error layers, where the interface is some Angstroms thinner than in the middle of a grain. The appear as dark lines on the images.
+\subsection{Correlation function}
+This causes a surface roughness, which can be characterized by the RMS roughness
+\begin{equation}
+	r_{\textsf{RMS}}=\sqrt{\sum_{x,y}\left(h(x,y)-\left\langle h(x,y) \right\rangle\right)^2}
+\end{equation}
+where $h(x,y)$ is the hight at $(x,y)$ and $\left\langle~\cdot~\right\rangle$ is a expectation value (or, actually, the mean value, since our samples are finite).
+
+Beyond this simple analysis, one could look at surface autocorrelation functions, which are defined by
+\begin{equation}\label{cfdef}
+	C(\Delta x,\Delta y)=\left\langle h(x,y)\cdot h(x+\Delta x,y\Delta y) \right\rangle-\left\langle h(x,y) \right\rangle\left\langle h(x+\Delta x,y+\Delta y) \right\rangle,
+\end{equation}
+which measures the similarity of the image at $(x,y)$ and $(x+\Delta x,y+\Delta y)$. Correlation function are defined such that, as one proofs easily, it holds:
+\begin{align}
+	C(\vec r - \vec r') &= C(\vec\rho) =C (-\vec\rho) \quad\textsl{and}\\
+	C(\vec\rho) &= C(\vec\rho+\vec\delta)\label{translation}
+\end{align}
+Thus, the are invariant under translation and inversion in space and therefore a nice tool do describe surfaces. With \eqref{translation} and $\left\langle h(x,y) \right\rangle=\mu$ being the mean value, one rewrites \eqref{cfdef} as
+\begin{equation}
+	C(\Delta x,\Delta y)=\left\langle h(x,y)\cdot h(x+\Delta x,y\Delta y) \right\rangle-\mu^2
+\end{equation}
+As we do not need the absolute value of height, we set $\mu=0$ for out further calculations, obtaining
+\begin{equation}
+	C(\Delta x,\Delta y)=\left\langle h(x,y)\cdot h(x+\Delta x,y\Delta y) \right\rangle\label{cfreal},
+\end{equation}
+which we recognize to be the Auto-Covariance function or the Variance function.
+
+Correlation functions in multiple dimensions are quite hard to be calculated, so for the moment, we restrict ourselves to one dimensional correlations in x and y direction.
+
+\subsection{Weibull Distribution}
+These Correlation functions reflect the spatial lifetime of a grain. Therefore, it is useful to use a Weibull Distribution to fit them:\footnote{T. Mewes, {\it PhD Thesis}, Kaiserslautern, {\bf 2002}}
+\begin{equation}
+	 W(x)=d\cdot\left[ 1-e^{-{\left( \frac x \xi\right)}^{2r}}+c\right]
+\end{equation}
+While $c$ and $d$ are just parameters representing white noise (e.g. noise in STM current, thermal noise...) and a height scale, respectively, the interesting parameters are the roughness exponent $r$ and the correlation length $\xi$. In probability theory, $2r$ is referred to as form parameter, which dertermins the curvature of the distribution at small $x$. For example,
+\begin{itemize}
+\item $r<0.5$~~~ very small grains, island growth
+\item $r=0.5$~~~ constant grainsize, exponential distribution
+\item $r=1$~~~~~ large grains, Rayleigh-Distribution
+\end{itemize}
+The correlation length, or typical lifetime, is directly linked to the mean grain size: If $x=\xi$,
+\begin{equation}
+	W(\xi)=d\cdot\left[ 1-e^{-1^{2r}}+c\right]=d\cdot\left[ 1-\frac{1}{e}+c\right].
+\end{equation}
+This means, that the fraction of grains which have not hit another yet is $\frac{1}{e}$, if $c$ is neglectible.
+
+\subsection{Grainsize distibution}
+The used fit function is
+\begin{equation}\label{gfit}
+f(D)=\frac{k}{\sigma\sqrt{2\pi}}\exp\left[-\frac{\left(\ln D - \ln \bar{D}\right)^2}{2\sigma^2}\right],
+\end{equation}
+with $k$ a normalization constant, $\sigma$ the standard deviation of $\ln D$ and $\bar{D}$ the mean grain diameter.\footnote{E. Papaiouanou {\it et al}, J. Appl. Phys. {\bf 102}, 043525 (2007)}
+
+
+\section{Implementation}
+The intension of \grainsize is to provide an automated analysis of AFM and STM images. It calculates several surface parameters to be used in surface characterization studies. The script consists of three sections:
+\subsection{CONFIG section}
+Here, some configuration is done, like providing an image path and the pixel-to-pixel distance, i.e. the spatial resolution of the image. It is mainly commented out when using \grainsize as a function, since is is then possible to pass these settings as arguments from a superior script or the MATLAB command prompt.
+\subsection{STATS section}
+After some preprocessing (ensuring that we deal with a grayscale image, applying scale factors, etc.), \grainsize calculates rms roughness, mean value and correlation functions. These are fitted with a Weibull distribution. All parameters are stored in \texttt{.csv} files in order to be processed later, the figures are saves as matlab figures (\texttt{.fig} files).
+\subsection{IMAGE section}
+Here, we look for grains in the image. First, an edge filter is applied, then matlab looks for roundish shapes of reasonable sizes. Those which intersect with the image border or are too large to be grains, are dropped. For the rest, we measure the diameter (MATLAB ImageRegionAnalyser, EquivDiameter property), and create a histogram and a fit function, which is stored as MATLAB figure as well.
+
+
+
+
+\section{Measurement}
+\end{document}
