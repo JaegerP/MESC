@@ -4,6 +4,14 @@
 *.tif
 *.tiff 
 
+#latex stuff
+*.aux
+*.log
+*.synctex.gz
+*.out
+*.pdf
+
+
 #matlab stuff
 *.mat
 *.fig

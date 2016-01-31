@@ -22,8 +22,10 @@ function [ cf_x, cf_y, avg, span, rms ] = calcCF( mat )
     rms  = sqrt(1/s(1)/s(2)*sum(sum(mat)));
 
     %% calculate height correlation function in x direction
+    %correct avg(mat) to be 0
+    mat=mat-avg;
     cf_x=zeros(1,round(s(1)/2));
-    for i = 1:round((s(1)-1)/2)	
+    parfor i = 1:round((s(1)-1)/2)	
         for k = 1:(s(1)-i) 
             cf_x(i) = cf_x(i) + sum((mat(i+k,:) - mat(k,:)).^2);
         end
@@ -34,7 +36,7 @@ function [ cf_x, cf_y, avg, span, rms ] = calcCF( mat )
     
     %% calculate height correlation function in y direction
     cf_y=zeros(1,round(s(2)/2));
-    for i = 1:round((s(2)-1)/2)	
+    parfor i = 1:round((s(2)-1)/2)	
         for k = 1:(s(2)-i) 
             cf_y(i) = cf_y(i) + sum((mat(:,i+k) - mat(:,k)).^2);
         end

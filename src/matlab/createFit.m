@@ -22,7 +22,7 @@ global m_HightTick;
 ft = fittype( 'd*(1-exp(-(x/a)^r))', 'independent', 'x', 'dependent', 'y' );
 opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
 opts.Display = 'Off';
-% [a d r]
+% [a c d r]
 opts.Lower = [0 0 0];
 opts.Upper = [Inf Inf Inf];
 opts.StartPoint = startParam;
@@ -41,7 +41,7 @@ loglog( min(xData):0.001:max(xData), fitresult(min(xData):0.001:max(xData)), 'r'
 %legend( sprintf('fit function\nroughness=%.2f', fitresult.r), 'measurement', 'Location', 'SouthEast' );
 legend( 'fit function', 'measurement', 'Location', 'SouthEast' );
 % Create ylabel
-ylabel({'<z(r)-z(0)>^2 [nm^2]'});
+ylabel({'<z(r)-z(0)>^2 [a.u.]'});
 
 % Create xlabel
 xlabel(sprintf('%s [nm]', label));

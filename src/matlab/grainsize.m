@@ -45,7 +45,7 @@
 % DO NOT CHANGE CODE OUTSIDE THIS SECTION, EXCEPT YOU KNOW WHAT YOU ARE 
 % DOING!!!
 
-function grainsize (m_InputPath, m_PixelDist)
+function [cfdata,imgdata]=grainsize (m_InputPath, m_PixelDist)
 
 % declare globals
 % distance from one edge of the emage to another
@@ -104,8 +104,11 @@ inputData = double( m_InputImage ) * m_HightTick;
 [ cf_x, cf_y, avg, span, rms ] = calcCF( inputData );
 
 % start parameters: [a c d r], function d*(1-exp(-(x/a)^r)+c)
-calcParam( cf_x, 'x', [2 0 1] );
-calcParam( cf_y, 'y', [2 0 1] );
+[xfig,xdata]=calcParam( cf_x, 'x', [2 0 1] );%
+[yfig,ydata]=calcParam( cf_y, 'y', [2 0 1] );
+ydata=[ydata, avg, span, rms ]';
+xdata=[xdata, avg, span, rms ]';
+
 %return;
 
 %% IMAGE ANALYSIS
@@ -118,6 +121,7 @@ binaryImage = imfill(binaryImage, 'holes');
 % but finally, we need the diameter.
 binaryImage = bwpropfilt(binaryImage, 'ConvexArea', m_GrainAreaBoundary);
 binaryImage = bwpropfilt(binaryImage, 'Eccentricity', m_ExcentricityBoundary);
+%binaryImage = bwpropfilt(binaryImage, 'EquivDiameter', [0 70]);
 labeledImage = bwlabel(binaryImage);
 measurements = regionprops(labeledImage, 'EquivDiameter');
 %allDiameters = [measurements.EquivDiameter];
@@ -131,11 +135,13 @@ title( sprintf('Grainsize Distributuon for %s' , m_InputPath) );
 % nanocrystalline Ni/Pt multilayers with deposition temperature", 2007
 ft = fittype( 'k/s*exp(-(log(x)-log(D))^2/2/s^2)', 'independent', 'x', 'dependent', 'y' );
 opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
-opts.StartPoint=[20 1 1];
+opts.StartPoint=[20 1 5];
+opts.Lower=[0 0 0];
+opts.Upper=[100 10 100];
 [xData, yData]=prepareCurveData(binDiameters*m_Distance, diamDistribution);
 [fr, gof] = fit( xData, yData, ft, opts );
 h=plot(fr, 'r', 'predobs');
-disp(sprintf('Fit parameters for grainsize distribution:\nMaximum: %f\nLogarithmic standard deviation: %f',fr.D,fr.s));
+%disp(sprintf('Fit parameters for grainsize distribution:\nMaximum: %f\nLogarithmic standard deviation: %f',fr.D,fr.s));
 % make figure more fancy
 set(h(1),'linewidth',2);
 set(h(2),'linewidth',2);
@@ -145,4 +151,12 @@ ylabel('occurences');
 legend( 'measurement', 'fit function', '95% Confidence Bounds', 'Location', 'NorthEast' );
 ylim([0, max(yData)+5]);
 savefig('GrainsizeDist.fig');
-close all;
+%close all;
+hold off;
+%figure();
+%imshow(binaryImage);
+%disp(xdata);
+%disp({'a','c','d','r','span','rms','avg'}');
+cfdata=table({'a','c','d','r','span','rms','avg'}',xdata,ydata,'RowNames',{'a','c','d','r','span','rms','avg'}','VariableNames',{'parameter','CF_X','CF_Y'}');
+imgdata=table([fr.D,fr.s]','RowNames',{'D','s'}');
+end
