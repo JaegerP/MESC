@@ -18,14 +18,14 @@ global m_HightTick;
 %% Fit: 'Direction-Height Correlation Function'.
 [xData, yData] = prepareCurveData( xval, cf_x );
 
-% Set up fittype and options.
+% Set up fittype (Weibull Function) and options.
 ft = fittype( 'd*(1-exp(-(x/a)^r))', 'independent', 'x', 'dependent', 'y' );
 opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
 opts.Display = 'Off';
 % [a d r]
-opts.Lower = [0 0 1];
-%opts.Upper = [Inf Inf Inf];
-opts.StartPoint = startParam;% [3 10 1];
+opts.Lower = [0 0 0];
+opts.Upper = [Inf Inf Inf];
+opts.StartPoint = startParam;
 
 % Fit model to data.
 [fitresult, gof] = fit( xData, yData, ft, opts );

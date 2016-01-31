@@ -39,29 +39,20 @@
 % In order to run this script, some configuration data has to be hard-coded
 % in the upper code section. 
 %
-% DO NOT CHANGE CODE OUTSIDE THIS SECTION, EXCEPT YOU KNOW WHAT YOU ARE 
-% DOING. BE SURE TO HAVE YOUR MEASURMENT DATA BACKUPED. UNECPEXTED
-% BEHAVIOUR MIGHT CAUSE LOSS OF DATA.
-%
 
 %% PARAMETER SETTING
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                  %
-%   BEWARE: IGNORING OLD CALIBRATION FOR NOW !!!   %
-%                                                  %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DO NOT CHANGE CODE OUTSIDE THIS SECTION, EXCEPT YOU KNOW WHAT YOU ARE 
+% DOING!!!
+
+function grainsize (m_InputPath, m_PixelDist)
 
 % declare globals
 % distance from one edge of the emage to another
 global m_Distance;
-% hight difference in which the color remains the same
-%global m_HightTick;
-%global m_LayerInitial;
 
 % input file location
-%m_InputPath = 'testimg.j2c';
-m_InputPath='test2.bmp';
+%m_InputPath='test2.bmp';
 
 % total input image size ( before cropping !!! )
 % in px
@@ -73,7 +64,7 @@ m_TotalImageSize_nm = 100; %Probably, that's it
 
 % xy Calibration factor (some magic factor taken from Philipp Fuhrmann's
 % original script)
-m_XYCalibration = 5.1; %STM before Jan '13
+%m_XYCalibration = 5.1; %STM before Jan '13
 
 % boundadies for grain area (in pixels)
 % you may need to adjust this.
@@ -85,6 +76,7 @@ m_ExcentricityBoundary = [0 1];
 % Number of bins for grainsize histogram
 m_NumberOfBins = 20; % Or whatever you want.
 
+% hight difference in which the color remains the same
 %m_HightTick = total height of color scale / number of colors;
 m_HightTick = 1.1191  / 256;
 
@@ -96,19 +88,24 @@ m_HightTick = 1.1191  / 256;
 %close open figures if any
 close all;
 
-m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px * m_XYCalibration;
-%m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px;
+
 m_InputImage = imread( m_InputPath );
 if size(m_InputImage,3) == 3
     m_InputImage = rgb2gray( m_InputImage );
 end
+
+
+%m_Distance = m_TotalImageSize_nm / m_TotalImageSize_px * m_XYCalibration;
+m_Distance = m_PixelDist;
+%m_TotalImageSize_px = max ( size ( m_InputImage ) );
+
 inputData = double( m_InputImage ) * m_HightTick;
 
 [ cf_x, cf_y, avg, span, rms ] = calcCF( inputData );
 
-% start parameters: [a d r], function d*(1-exp(-(x/a)^r))
-calcParam( cf_x, 'x', [10 2 0] );
-calcParam( cf_y, 'y', [10 2 0] );
+% start parameters: [a c d r], function d*(1-exp(-(x/a)^r)+c)
+calcParam( cf_x, 'x', [2 0 1] );
+calcParam( cf_y, 'y', [2 0 1] );
 %return;
 
 %% IMAGE ANALYSIS
@@ -138,7 +135,7 @@ opts.StartPoint=[20 1 1];
 [xData, yData]=prepareCurveData(binDiameters*m_Distance, diamDistribution);
 [fr, gof] = fit( xData, yData, ft, opts );
 h=plot(fr, 'r', 'predobs');
-disp(sprintf('Maximum: %f\nLogarithmic standard deviation: %f',fr.D,fr.s));
+disp(sprintf('Fit parameters for grainsize distribution:\nMaximum: %f\nLogarithmic standard deviation: %f',fr.D,fr.s));
 % make figure more fancy
 set(h(1),'linewidth',2);
 set(h(2),'linewidth',2);

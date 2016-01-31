@@ -12,8 +12,9 @@ function [ cf_x, cf_y, avg, span, rms ] = calcCF( mat )
 %
 %==========================================================================
 %
-% Authors: Philipp Jaeger
-% Copyright: TU Kaiserslautern, AG Magnetismus
+% Author:       Philipp Jaeger
+% Copyright:    AG Magnetismus
+%               TU Kaiserslautern
 %
     span = max(max(mat)) - min(min(mat));
     avg = mean(mean(mat));

@@ -1,0 +1,52 @@
+#################################################
+#                                               #
+#   Original Approach to calculate Parameters   #
+#                                               #
+#################################################
+
+calculate the roughness a, interface layer thickness w, and correlation length xi
+a is calculated by determining the slope of a linear fit to the double logarithmic 
+ representation of the height correlation function for small x
+
+w is the saturation value for the height correlation function is determined by fitting 
+the height correlation function to a constant for large x
+
+xi is then calculated using the y-intercept of the first graph.
+for small x the height correlation function is proportional to 2*w^2 * (x/xi)^2a
+the y-intercept in the double logarithmic plot is thus 2*w^2/xi^2a and xi can be determined.
+
+
+
+#################################################
+#                                               #
+#   How grainsize.m works                       #
+#                                               #
+#################################################
+
+Determine roughness r, interface thickness d and correlation length a
+using MATLAB curve fitting for the function
+
+d*(1-exp(-(x/a)^r))
+(Weibull Distribution)
+
+where c is a offset constant. Mathematical interpretation of the Parameters:
+d: saturation value
+a: length scale of saturation
+r: shape of th curve for small x: constant for r=0, exponential approach to d for 
+   r=1, gaussian approach for r=2, etc.
+c: "amplitude" of roughness noise
+
+
+
+
+
+
+#################################################
+#                                               #
+#   STM Images taken by Philipp Fuhrmann 2012   #
+#                                               #
+#################################################
+location
+smb://magnet/MBE/Samples/{6,7,8,9,10}*
+
+
