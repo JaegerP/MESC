@@ -17,4 +17,4 @@
 *.fig
 *.m~
 #ignore measurements here
-#roughness-2016-01-08/*
+roughness-2016-01-08/*
