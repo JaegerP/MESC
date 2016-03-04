@@ -16,5 +16,5 @@
 *.mat
 *.fig
 *.m~
-#ignore measurements for here
-roughness-2016-01-08/*
+#ignore symlinks
+roughness-2016-01-08/*.m
