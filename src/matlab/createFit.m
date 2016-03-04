@@ -19,12 +19,12 @@ global m_HightTick;
 [xData, yData] = prepareCurveData( xval, cf_x );
 
 % Set up fittype (Weibull Function) and options.
-ft = fittype( 'd*(1-exp(-(x/a)^r))', 'independent', 'x', 'dependent', 'y' );
+ft = fittype( 'd*(1-exp(-(x/a)^r))+c', 'independent', 'x', 'dependent', 'y' );
 opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
 opts.Display = 'Off';
 % [a c d r]
-opts.Lower = [0 0 0];
-opts.Upper = [Inf Inf Inf];
+opts.Lower = [0 0 0 0];
+opts.Upper = [Inf 1 Inf Inf];
 opts.StartPoint = startParam;
 
 % Fit model to data.

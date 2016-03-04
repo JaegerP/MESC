@@ -33,7 +33,7 @@
 % no artifacts are visible in order to obtain reasonable data.
 % Currently, only grayscale images are supported.
 %
-% This script is based on Philipp Fuhrmann's script written in R,
+% This script is based on Philipp Fuhrmann's script written in R,   
 % and on the PhD thesis of Tim Mewes, Appendix A
 %
 % In order to run this script, some configuration data has to be hard-coded
@@ -104,8 +104,8 @@ inputData = double( m_InputImage ) * m_HightTick;
 [ cf_x, cf_y, avg, span, rms ] = calcCF( inputData );
 
 % start parameters: [a c d r], function d*(1-exp(-(x/a)^r)+c)
-[xfig,xdata]=calcParam( cf_x, 'x', [2 0 1] );%
-[yfig,ydata]=calcParam( cf_y, 'y', [2 0 1] );
+[xfig,xdata]=calcParam( cf_x, 'x', [2 0 0 1] );%
+[yfig,ydata]=calcParam( cf_y, 'y', [2 0 0 1] );
 ydata=[ydata, avg, span, rms ]';
 xdata=[xdata, avg, span, rms ]';
 
